@@ -1,0 +1,13 @@
+import { PubSub } from "graphql-subscriptions";
+import { Module } from "@nestjs/common";
+
+@Module({
+  providers: [
+    {
+      provide: "PUB_SUB",
+      useClass: PubSub,
+    },
+  ],
+  exports: ["PUB_SUB"],
+})
+export class PubSubModule {}

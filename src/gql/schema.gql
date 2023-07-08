@@ -1,0 +1,77 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Float!
+  email: String!
+  username: String!
+  created: DateTime!
+  lastUpdate: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type UserVote {
+  id: Float!
+  user: User!
+  board: Board!
+  vote: String
+  online: Boolean!
+  status: UserBoardStatus!
+  admin: Boolean!
+  created: DateTime!
+  lastUpdate: DateTime!
+}
+
+enum UserBoardStatus {
+  ONLINE
+  OFFLINE
+  IDLE
+}
+
+type Board {
+  id: Float!
+  title: String!
+  code: String!
+  created: DateTime!
+  lastUpdate: DateTime!
+  status: BoardStatus!
+  ticket: String
+  ticketTimer: DateTime
+  userVotes: [UserVote!]!
+}
+
+enum BoardStatus {
+  VOTING
+  RESULTS
+}
+
+type Query {
+  boards: [Board!]!
+  board(code: String!): Board
+}
+
+type Mutation {
+  createBoard(title: String!): Board!
+  updateBoardTicket(code: String!, ticket: String): Boolean!
+  changeBoardStatus(code: String!, status: BoardStatus!): Boolean!
+  joinBoard(code: String!): Boolean!
+  changeAdminStatus(code: String!, admin: Boolean!, userId: Int): Boolean!
+  changeStatus(code: String!, status: UserBoardStatus!): Boolean!
+  changeVote(code: String!, vote: String): Boolean!
+  removeUserFromBoard(code: String!, userId: Int!): Boolean!
+  resetVotes(
+    code: String!
+
+    """If null, all votes are cleared"""
+    userId: Int
+  ): Boolean!
+}
+
+type Subscription {
+  boardUpdate(code: String!): Board!
+}
