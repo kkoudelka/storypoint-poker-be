@@ -12,6 +12,7 @@ import { AuthModule } from "./auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
 import { SchedulerModule } from "./scheduler/scheduler.module";
 import { ScheduleModule } from "@nestjs/schedule";
+import { ApiModule } from "./api/api.module";
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { ScheduleModule } from "@nestjs/schedule";
     AuthModule,
     ScheduleModule.forRoot(),
     SchedulerModule,
+    ApiModule,
   ],
 })
 export class AppModule {}
