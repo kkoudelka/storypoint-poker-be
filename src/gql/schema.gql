@@ -70,6 +70,7 @@ type Mutation {
     """If null, all votes are cleared"""
     userId: Int
   ): Boolean!
+  changeDisplayName(displayName: String!): Boolean!
 }
 
 type Subscription {

@@ -9,9 +9,18 @@ import { UserVote } from "src/db/models/votes.entity";
 import { VoteService } from "./services/vote.service";
 import { VoteResolver } from "./resolvers/vote.resolver";
 import { PubSubModule } from "./pubsub.module";
+import { UserResolver } from "./resolvers/user.resolver";
+import { UserService } from "./services/user.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Board, User, UserVote]), PubSubModule],
-  providers: [BoardResolver, BoardService, VoteResolver, VoteService],
+  providers: [
+    BoardResolver,
+    BoardService,
+    VoteResolver,
+    VoteService,
+    UserResolver,
+    UserService,
+  ],
 })
 export class GQLModule {}
