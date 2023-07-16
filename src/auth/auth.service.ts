@@ -41,9 +41,19 @@ export class AuthService {
         throw new UnauthorizedException("Incorrect credentials");
       }
 
-      return { ...user, password: undefined };
+      const profilePic = this.resolveProfilePic(user);
+
+      return { ...user, password: undefined, profilePic };
     } catch (error) {
       throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  resolveProfilePic(user: User) {
+    if (user.profilePic) {
+      return `${process.env.BE_URL}/images/id/${user.profilePic}`;
+    } else {
+      return `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.email}`;
     }
   }
 

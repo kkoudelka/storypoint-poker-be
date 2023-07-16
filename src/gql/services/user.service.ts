@@ -23,4 +23,36 @@ export class UserService {
       return false;
     }
   }
+
+  async changePfp(user: User, pfp: number | null): Promise<User | null> {
+    if (pfp === null) {
+      user.profilePic = null;
+      try {
+        await this.userRepository.save(user);
+        return user;
+      } catch (e) {
+        this.logger.error(e);
+        return null;
+      }
+    }
+
+    try {
+      if (pfp < 1 || pfp > 20) {
+        return null;
+      }
+
+      user.profilePic = pfp.toString();
+      await this.userRepository.save(user);
+      return user;
+    } catch (e) {
+      this.logger.error(e);
+      return null;
+    }
+  }
+
+  get(id: number): User | PromiseLike<User> {
+    return this.userRepository.findOne({
+      where: { id },
+    });
+  }
 }

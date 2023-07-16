@@ -13,6 +13,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { SchedulerModule } from "./scheduler/scheduler.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ApiModule } from "./api/api.module";
+import { ImagesModule } from "./images/images.module";
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { ApiModule } from "./api/api.module";
     ScheduleModule.forRoot(),
     SchedulerModule,
     ApiModule,
+    ImagesModule,
   ],
 })
 export class AppModule {}

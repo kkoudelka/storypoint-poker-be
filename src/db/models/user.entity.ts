@@ -24,6 +24,9 @@ export class User {
   @Field()
   created: Date;
 
+  @Column({ nullable: true, name: "profile_pic" })
+  profilePic: string;
+
   @Column({
     type: "timestamptz",
     default: () => "CURRENT_TIMESTAMP",

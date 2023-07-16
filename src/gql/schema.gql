@@ -8,6 +8,7 @@ type User {
   username: String!
   created: DateTime!
   lastUpdate: DateTime!
+  profilePic: String
 }
 
 """
@@ -50,9 +51,16 @@ enum BoardStatus {
   RESULTS
 }
 
+type AvailableImage {
+  key: Float!
+  value: String!
+}
+
 type Query {
   boards: [Board!]!
   board(code: String!): Board
+  getUser: User!
+  getAvailableImages: [AvailableImage!]!
 }
 
 type Mutation {
@@ -71,6 +79,7 @@ type Mutation {
     userId: Int
   ): Boolean!
   changeDisplayName(displayName: String!): Boolean!
+  changePfp(pfp: Int): User!
 }
 
 type Subscription {
