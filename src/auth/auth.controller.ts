@@ -1,17 +1,32 @@
-import { Body, Controller, HttpCode, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, Logger, Post, Res } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginDto, SignUpDto } from "./controller.types";
 import { User } from "src/db/models/user.entity";
 import { ApiCreatedResponse } from "@nestjs/swagger";
+import * as Sentry from "@sentry/node";
 
 @Controller("auth")
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
+
   constructor(private readonly authService: AuthService) {}
 
   @Post("login")
   @HttpCode(200)
   async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto.email, loginDto.password);
+    const transaction = Sentry.startTransaction({
+      op: "login",
+      name: "Login transaction",
+    });
+
+    try {
+      return await this.authService.login(loginDto.email, loginDto.password);
+    } catch (error) {
+      Sentry.captureException(error);
+      this.logger.error(error);
+    } finally {
+      transaction.finish();
+    }
   }
 
   @Post("register")
@@ -20,10 +35,22 @@ export class AuthController {
     type: User,
   })
   async register(@Body() registerDto: SignUpDto) {
-    return this.authService.registerUser(
-      registerDto.email,
-      registerDto.password,
-      registerDto.name,
-    );
+    const transaction = Sentry.startTransaction({
+      op: "register",
+      name: "Register transaction",
+    });
+
+    try {
+      return await this.authService.registerUser(
+        registerDto.email,
+        registerDto.password,
+        registerDto.name,
+      );
+    } catch (error) {
+      Sentry.captureException(error);
+      this.logger.error(error);
+    } finally {
+      transaction.finish();
+    }
   }
 }
