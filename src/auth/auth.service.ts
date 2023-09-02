@@ -30,7 +30,7 @@ export class AuthService {
 
   async login(email: string, password: string) {
     if (!email || !password) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException("Missing credentials");
     }
 
     try {

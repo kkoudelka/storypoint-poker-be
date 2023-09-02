@@ -32,7 +32,9 @@ import { ImagesModule } from "./images/images.module";
       password: process.env.DB_PWD,
       database: process.env.DB_NAME,
       entities: [Board, User, UserVote],
-      synchronize: true,
+      synchronize: process.env.NODE_ENV !== "production",
+      logger: "advanced-console",
+      verboseRetryLog: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
