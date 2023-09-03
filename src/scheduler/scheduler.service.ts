@@ -14,7 +14,7 @@ export class SchedulerService {
     private dataSource: DataSource,
   ) {}
 
-  @Cron("*/10 * * * *")
+  @Cron("0 */5 * * *")
   async updateOnlineStatuses() {
     this.logger.log("Updating online statuses");
     try {
