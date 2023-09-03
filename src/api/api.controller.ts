@@ -13,10 +13,4 @@ export class ApiController {
   async healthz() {
     return { status: "OK" };
   }
-
-  @Get("env")
-  @HttpCode(200)
-  async env() {
-    return process.env;
-  }
 }
