@@ -10,6 +10,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/db/models/user.entity";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
+import * as Sentry from "@sentry/node";
 
 @Injectable()
 export class AuthService {
@@ -33,6 +34,11 @@ export class AuthService {
       throw new InternalServerErrorException("Missing credentials");
     }
 
+    const transaction = Sentry.startTransaction({
+      op: "login",
+      name: "Login transaction",
+    });
+
     try {
       const user = await this.userRepository.findOne({ where: { email } });
       if (!user) {
@@ -50,7 +56,10 @@ export class AuthService {
     } catch (e) {
       this.logger.error("Error while logging in");
       this.logger.error(e);
+      Sentry.captureException(e);
       throw new InternalServerErrorException(e);
+    } finally {
+      transaction.finish();
     }
   }
 
@@ -63,6 +72,11 @@ export class AuthService {
   }
 
   async registerUser(email: string, password: string, name: string) {
+    const transaction = Sentry.startTransaction({
+      op: "register",
+      name: "Register transaction",
+    });
+
     try {
       const [, count] = await this.userRepository.findAndCount({
         where: { email },
@@ -87,7 +101,10 @@ export class AuthService {
     } catch (error) {
       this.logger.error("Error while registering user");
       this.logger.error(error);
+      Sentry.captureException(error);
       throw new InternalServerErrorException(error);
+    } finally {
+      transaction.finish();
     }
   }
 }
